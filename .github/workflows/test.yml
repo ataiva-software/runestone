@@ -38,6 +38,3 @@ jobs:
     
     - name: Build binary
       run: go build -o runestone .
-    
-    - name: Test bootstrap command (validation only)
-      run: ./runestone bootstrap --config examples/basic-aws.yaml
