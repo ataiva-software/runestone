@@ -65,6 +65,29 @@ Or jump right in with the [Quick Start](#-quick-start) below.
 
 ## Installation
 
+### Download Binary (Recommended)
+
+Download the latest release for your platform:
+
+- **Linux (x64)**: [runestone-linux-amd64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-linux-amd64)
+- **Linux (ARM64)**: [runestone-linux-arm64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-linux-arm64)
+- **macOS (Intel)**: [runestone-darwin-amd64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-darwin-amd64)
+- **macOS (Apple Silicon)**: [runestone-darwin-arm64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-darwin-arm64)
+- **Windows (x64)**: [runestone-windows-amd64.exe](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-windows-amd64.exe)
+
+After downloading, make the binary executable and move it to your PATH:
+
+```bash
+# Linux/macOS
+chmod +x runestone-*
+sudo mv runestone-* /usr/local/bin/runestone
+
+# Verify installation
+runestone --version
+```
+
+### Build from Source
+
 ```bash
 # Clone the repository
 git clone https://github.com/ataiva-software/runestone.git
