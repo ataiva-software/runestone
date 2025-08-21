@@ -38,7 +38,9 @@ func TestRDSInstanceOperations(t *testing.T) {
 		// If we get an auth error, skip the test
 		if err != nil && (strings.Contains(err.Error(), "AuthFailure") || 
 			strings.Contains(err.Error(), "InvalidClientTokenId") ||
-			strings.Contains(err.Error(), "security token")) {
+			strings.Contains(err.Error(), "security token") ||
+			strings.Contains(err.Error(), "no EC2 IMDS role found") ||
+			strings.Contains(err.Error(), "failed to refresh cached credentials")) {
 			t.Skip("Skipping integration test - AWS credentials not available or invalid")
 		}
 		

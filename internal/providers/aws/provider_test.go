@@ -9,6 +9,10 @@ import (
 )
 
 func TestProvider_Initialize(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping AWS provider tests in short mode")
+	}
+	
 	tests := []struct {
 		name           string
 		providerConfig map[string]interface{}
