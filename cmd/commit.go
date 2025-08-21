@@ -252,7 +252,7 @@ func displayExecutionResults(result *config.ExecutionResult, duration time.Durat
 	fmt.Printf("\n--- Execution Complete ---\n")
 	
 	if result.Success {
-		fmt.Printf("✔ Commit complete (duration: %v)\n", duration.Round(time.Second))
+		fmt.Printf(" Commit complete (duration: %v)\n", duration.Round(time.Second))
 	} else {
 		fmt.Printf("✗ Commit completed with errors (duration: %v)\n", duration.Round(time.Second))
 	}

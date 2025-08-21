@@ -51,7 +51,7 @@ jobs:
             const fs = require('fs');
             const preview = JSON.parse(fs.readFileSync('preview-result.json', 'utf8'));
             
-            let comment = '## 🔍 Infrastructure Preview\n\n';
+            let comment = '##  Infrastructure Preview\n\n';
             
             if (preview.success) {
               comment += `**Changes detected:** ${preview.changes_count}\n`;
@@ -60,19 +60,19 @@ jobs:
               if (preview.changes_count > 0) {
                 comment += '### Planned Changes\n';
                 preview.changes.forEach(change => {
-                  const icon = change.type === 'create' ? '✅' : 
-                              change.type === 'update' ? '🔄' : '❌';
+                  const icon = change.type === 'create' ? '' : 
+                              change.type === 'update' ? '' : '❌';
                   comment += `- ${icon} **${change.type}** \`${change.resource_kind}.${change.resource_name}\`\n`;
                 });
               } else {
-                comment += '✅ No changes detected - infrastructure is up to date\n';
+                comment += ' No changes detected - infrastructure is up to date\n';
               }
               
               if (preview.has_drift) {
                 comment += '\n### Drift Detected\n';
                 preview.drift_results.forEach(drift => {
                   if (drift.has_drift) {
-                    comment += `- 🔄 **${drift.resource_name}**\n`;
+                    comment += `-  **${drift.resource_name}**\n`;
                     drift.changes.forEach(change => {
                       comment += `  - ${change}\n`;
                     });
@@ -80,7 +80,7 @@ jobs:
                 });
               }
             } else {
-              comment += `❌ **Error:** ${preview.error}\n`;
+              comment += ` **Error:** ${preview.error}\n`;
             }
             
             github.rest.issues.createComment({
@@ -240,7 +240,7 @@ def parse_runestone_output(filename):
         result = json.load(f)
     
     if result['success']:
-        print(f"✅ Operation successful")
+        print(f" Operation successful")
         print(f"Duration: {result['duration_seconds']:.2f}s")
         
         if 'changes_count' in result:
@@ -251,7 +251,7 @@ def parse_runestone_output(filename):
             for violation in result['policy_violations']:
                 print(f"  - {violation['severity']}: {violation['message']}")
     else:
-        print(f"❌ Operation failed: {result['error']}")
+        print(f" Operation failed: {result['error']}")
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Examples
 
-**Generated on: 2025-08-21 16:44:46 UTC**
+**Generated on: 2025-08-21 17:13:55 UTC**
 
 This document provides practical examples of Runestone configurations for common use cases.
 

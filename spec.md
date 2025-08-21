@@ -72,7 +72,7 @@ Rich plan output with color-coded diffs.
 
 Interactive approve mode for manual changes.
 
-✅ MVP Delivery =
+ MVP Delivery =
 
 CLI engine
 
@@ -140,7 +140,7 @@ Plugin Ecosystem → community-driven providers/modules.
 
 Optional GUI Dashboard → visualization of infra graph, drift, and changes.
 
-💡 The core philosophy:
+ The core philosophy:
 Terraform = declarative configs + static state file.
 Runestone = declarative configs + living reconciliation loop (more like Kubernetes, less like Terraform).
 
@@ -165,10 +165,10 @@ Validates configuration + schema.
 
 Output example:
 
-✔ Provider aws (v0.2.1) installed
-✔ Provider gcp (v0.1.9) installed
-✔ Module network/vpc pulled from git::github.com/org/modules
-✔ Configuration validated
+ Provider aws (v0.2.1) installed
+ Provider gcp (v0.1.9) installed
+ Module network/vpc pulled from git::github.com/org/modules
+ Configuration validated
 
 2. Plan (dry-run with real-time drift info)
 runestone plan
@@ -177,7 +177,7 @@ Instead of only comparing config → state file, Runestone also checks provider 
 
 Output example:
 
-🔍 Reconciling infrastructure...
+ Reconciling infrastructure...
 
 Detected drift:
   • aws_s3_bucket.logs has extra tag "env=qa" (not in config)
@@ -200,20 +200,20 @@ runestone apply
 
 Runestone builds the DAG of resources, runs what it can in parallel, and surfaces a live execution graph:
 
-⏳ Applying changes...
+ Applying changes...
 
   [parallel] aws_s3_bucket.logs .......................... CREATED
   [serial]   gcp_sql_instance.db-prod .................... RESIZED (50GB → 100GB)
   [delete]   aws_iam_user.temp_user ...................... REMOVED
 
-✔ Apply complete in 1m42s
+ Apply complete in 1m42s
 
 4. Reconcile (continuous drift correction)
 runestone reconcile
 
 This is where Runestone feels different from Terraform. Instead of waiting until a manual plan/apply, it periodically checks reality vs config, and either reports or auto-heals:
 
-🔄 Reconciling current infra state...
+ Reconciling current infra state...
 
   Drift detected:
     • aws_ec2.instance.web-1 is stopped (expected running)
@@ -221,7 +221,7 @@ This is where Runestone feels different from Terraform. Instead of waiting until
   Action taken:
     • aws_ec2.instance.web-1 restarted
 
-✔ Infrastructure reconciled (2 drift issues resolved)
+ Infrastructure reconciled (2 drift issues resolved)
 
 👉 Users can set --auto-heal=false if they just want reporting.
 
@@ -230,12 +230,12 @@ runestone destroy
 
 Straightforward, but with dependency-safe teardown and drift awareness.
 
-⚠️  The following resources will be destroyed:
+  The following resources will be destroyed:
 
 + aws_s3_bucket.logs
 + gcp_sql_instance.db-prod
 
-✔ Destroy complete (2m18s)
+ Destroy complete (2m18s)
 
 🔹 Key Differentiators in UX
 
@@ -312,7 +312,7 @@ runestone preview
 
 Output:
 
-🔍 Inspecting live infrastructure...
+ Inspecting live infrastructure...
 
 Drift observed:
   • gcp_sql_instance.db-prod is at 50GB (expected 100GB)
@@ -327,7 +327,7 @@ Proposed adjustments:
 
 Next step: run `runestone commit` to engrave these changes.
 
-✅ This way it doesn’t read like Terraform output, feels more human, and reinforces Runestone’s metaphor of “engraving / shaping infra.”
+ This way it doesn’t read like Terraform output, feels more human, and reinforces Runestone’s metaphor of “engraving / shaping infra.”
 
 Would you like me to lean harder into the Runestone metaphor (engraving, chiseling, carving, erasing) for the CLI UX, or keep it clean + professional (preview, commit, align, dismantle) so it appeals to enterprises as well?
 
@@ -344,7 +344,7 @@ runestone preview
 
 Output:
 
-🔍 Inspecting live infrastructure...
+ Inspecting live infrastructure...
 
 Drift detected:
   • gcp_sql_instance.db-prod is at 50GB (expected 100GB)
@@ -363,7 +363,7 @@ runestone commit
 
 Output:
 
-⏳ Committing infrastructure changes...
+ Committing infrastructure changes...
 
 + Created aws_s3_bucket.logs
    ~ Updated gcp_sql_instance.db-prod (50GB → 100GB)
@@ -371,18 +371,18 @@ Output:
 
 + Removed aws_iam_user.temp_user
 
-✔ Commit complete (duration: 1m42s)
+ Commit complete (duration: 1m42s)
 
 runestone align
 
 Output:
 
-🔄 Aligning desired state with reality...
+ Aligning desired state with reality...
 
    • Restarted aws_ec2.instance.web-1 (was stopped, expected running)
    • Corrected IAM role policy on aws_iam_role.app_role
 
-✔ Infrastructure aligned (2 drift issues resolved)
+ Infrastructure aligned (2 drift issues resolved)
 
 Why Option A Works
 
@@ -586,17 +586,17 @@ runestone bootstrap
 
 Output:
 
-✔ Provider aws (v0.3.1) installed
-✔ Provider gcp (v0.2.5) installed
-✔ Module vpc (v1.2.0) pulled from github.com/runestone-modules/aws-vpc
-✔ Configuration validated against schemas
+ Provider aws (v0.3.1) installed
+ Provider gcp (v0.2.5) installed
+ Module vpc (v1.2.0) pulled from github.com/runestone-modules/aws-vpc
+ Configuration validated against schemas
 
 3. Preview (dry-run + drift check)
 runestone preview
 
 Output:
 
-🔍 Inspecting live infrastructure...
+ Inspecting live infrastructure...
 
 Drift detected:
   • gcp_sql_instance.db-prod is at 50GB (expected 100GB)
@@ -614,7 +614,7 @@ runestone commit
 
 Output:
 
-⏳ Committing infrastructure changes...
+ Committing infrastructure changes...
 
 + Created aws_s3_bucket.logs
    ~ Updated gcp_sql_instance.db-prod (50GB → 100GB)
@@ -622,19 +622,19 @@ Output:
 
 + Removed aws_iam_user.temp_user
 
-✔ Commit complete (duration: 1m42s)
+ Commit complete (duration: 1m42s)
 
 5. Align (continuous reconciliation)
 runestone align
 
 Output:
 
-🔄 Aligning desired state with reality...
+ Aligning desired state with reality...
 
    • Restarted aws_ec2.instance.web-1 (was stopped, expected running)
    • Corrected IAM role policy on aws_iam_role.app_role
 
-✔ Infrastructure aligned (2 drift issues resolved)
+ Infrastructure aligned (2 drift issues resolved)
 
 🔹 Key Takeaways
 
@@ -661,7 +661,7 @@ runestone commit --graph
 
 Output:
 
-⏳ Committing infrastructure changes...
+ Committing infrastructure changes...
 
    +---------------------------------+
    |            core-network         |
@@ -687,7 +687,7 @@ Output:
                   | AWS IAM User     |
                   +------------------+
 
-✔ Commit complete (duration: 1m42s)
+ Commit complete (duration: 1m42s)
 
 🔹 Features of the DAG Output
 
@@ -699,7 +699,7 @@ Resources with no dependency run in parallel.
 
 Live Status Indicators
 
-[✔] Completed
+[] Completed
 [~] Updating
 [+] Creating
 [-] Removing
@@ -1305,7 +1305,7 @@ ChatGPT said:
 
 That’s the key design decision — whether Runestone should feel like a programming language or a declarative config with light expressions. Let’s break it down carefully.
 
-1️⃣ Declarative + YAML/DSL (current approach)
+1⃣ Declarative + YAML/DSL (current approach)
 
 Pros:
 
@@ -1327,7 +1327,7 @@ Templating required for advanced logic: might feel “hacky” at scale.
 
 Not as flexible for modules that need logic (like generating N resources based on API query).
 
-2️⃣ Full Programming Language Approach
+2⃣ Full Programming Language Approach
 
 Imagine a Runestone DSL / embedded language (like Pulumi or CDK) where config is code (Go, Python, Rust, or custom DSL).
 
@@ -1351,7 +1351,7 @@ Harder to keep human-readable at scale: massive scripts vs. clean YAML.
 
 More work for MVP: language parser, runtime, security sandboxing.
 
-3️⃣ Recommended MVP Approach
+3⃣ Recommended MVP Approach
 
 Hybrid declarative + lightweight expressions:
 
@@ -1396,7 +1396,7 @@ ${} → ternary / computed values
 
 YAML → keeps everything readable and declarative
 
-✅ Bottom line:
+ Bottom line:
 
 MVP: stay declarative + lightweight expressions.
 
@@ -1416,7 +1416,7 @@ Perfect — let’s finalize the Runestone YAML spec for the MVP, fully declarat
 
 Purpose: AWS-focused, human-readable, drift-aware, DAG-driven. Optional Kubernetes later.
 
-1️⃣ File Structure
+1⃣ File Structure
 project: analytics-platform
 environment: prod
 variables:                     # global variables
@@ -1492,7 +1492,7 @@ resources:
       storage_gb: "${environment == 'prod' ? 100 : 20}"
       backup_enabled: "${environment == 'prod'}"
 
-2️⃣ Supported Expressions
+2⃣ Supported Expressions
 
 Ternary / conditional
 
@@ -1516,7 +1516,7 @@ tags: "${tags}"
 
 All expressions are evaluated before validation, keeping schemas strictly typed.
 
-3️⃣ Drift & Policies
+3⃣ Drift & Policies
 
 driftPolicy.autoHeal → Runestone attempts to fix drift automatically.
 
@@ -1524,7 +1524,7 @@ driftPolicy.notifyOnly → only report drift, don’t modify.
 
 Optional per-resource drift policy allows flexible enforcement.
 
-4️⃣ DAG / Dependency Features
+4⃣ DAG / Dependency Features
 
 Dependencies inferred automatically:
 
@@ -1536,7 +1536,7 @@ depends_on: [module:vpc, aws:s3:bucket.logs-main]
 
 DAG determines execution order; resources without dependencies run in parallel.
 
-5️⃣ CLI Commands (MVP)
+5⃣ CLI Commands (MVP)
 Command Description
 bootstrap Install provider SDKs, pull modules, validate config
 preview Dry-run + drift detection; outputs Option A summary
@@ -1565,7 +1565,7 @@ DAG Graph Example (commit --graph):
 | logs-0 |    | logs-1 |
 +--------+    +--------+
 
-6️⃣ Additional Useful Features for MVP
+6⃣ Additional Useful Features for MVP
 
 Global Variables (variables)
 
@@ -1591,7 +1591,7 @@ Optional Output / Export
 
 JSON or Markdown for CI/CD reporting.
 
-✅ This YAML spec is fully declarative, human-readable, supports loops, ternaries, variables, drift policies, DAG execution, and modules.
+ This YAML spec is fully declarative, human-readable, supports loops, ternaries, variables, drift policies, DAG execution, and modules.
 
 It’s ready to implement as the Runestone MVP for AWS, with optional Kubernetes extension later.
 
@@ -1671,7 +1671,7 @@ resources:
       storage_gb: "${environment == 'prod' ? 100 : 20}"
       backup_enabled: "${environment == 'prod'}"
 
-✅ Notes on the Update
+ Notes on the Update
 
 Module source URLs now point to the Ataiva GitHub org:
 
@@ -1729,7 +1729,7 @@ This keeps all Runestone modules centralized in the same org/repo, making versio
 
 Modules can still have independent versions (tags or subdirectory versioning).
 
-✅ Benefits
+ Benefits
 
 Organized under a single repo/org → easier to maintain.
 
@@ -1749,7 +1749,7 @@ ChatGPT said:
 
 It depends on how you want to manage development, versioning, and releases. Here’s a careful breakdown of both approaches:
 
-1️⃣ Keep modules inside the same Runestone repo
+1⃣ Keep modules inside the same Runestone repo
 
 Pros:
 
@@ -1787,7 +1787,7 @@ modules:
     source: github.com/ataiva-software/runestone/modules/aws-vpc
     version: 1.0.0
 
-2️⃣ Put modules in a separate runestone-modules repo
+2⃣ Put modules in a separate runestone-modules repo
 
 Pros:
 
@@ -1824,7 +1824,7 @@ modules:
     source: github.com/ataiva-software/runestone-modules/aws-vpc
     version: 1.0.0
 
-✅ Recommendation for MVP
+ Recommendation for MVP
 
 Start with modules inside the main Runestone repo: simpler for MVP development, testing, and early contributors.
 
@@ -1980,7 +1980,7 @@ CLI Commands
 
 bootstrap, preview, commit, align, dismantle
 
-✅ Why This Is Ready for MVP Development
+ Why This Is Ready for MVP Development
 
 All AWS core resources included.
 

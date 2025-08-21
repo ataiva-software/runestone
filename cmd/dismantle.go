@@ -35,7 +35,7 @@ func runDismantle(cmd *cobra.Command, args []string) error {
 	autoApprove, _ := cmd.Flags().GetBool("auto-approve")
 	force, _ := cmd.Flags().GetBool("force")
 
-	fmt.Println("⚠️  Preparing to dismantle infrastructure...")
+	fmt.Println("️  Preparing to dismantle infrastructure...")
 
 	// Parse configuration
 	parser := config.NewParser()
@@ -91,12 +91,12 @@ func runDismantle(cmd *cobra.Command, args []string) error {
 	}
 
 	if len(existingInstances) == 0 {
-		fmt.Println("✔ No resources found to dismantle")
+		fmt.Println(" No resources found to dismantle")
 		return nil
 	}
 
 	// Show what will be destroyed
-	fmt.Printf("\n⚠️  The following resources will be destroyed:\n\n")
+	fmt.Printf("\n️  The following resources will be destroyed:\n\n")
 	for _, instance := range existingInstances {
 		fmt.Printf("- %s (%s)\n", instance.ID, instance.Kind)
 	}
@@ -201,7 +201,7 @@ func displayDismantleResults(result *config.ExecutionResult, duration time.Durat
 	fmt.Printf("\n--- Dismantle Complete ---\n")
 	
 	if result.Success {
-		fmt.Printf("✔ Dismantle complete (duration: %v)\n", duration.Round(time.Second))
+		fmt.Printf(" Dismantle complete (duration: %v)\n", duration.Round(time.Second))
 	} else {
 		fmt.Printf("✗ Dismantle completed with errors (duration: %v)\n", duration.Round(time.Second))
 	}

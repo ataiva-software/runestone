@@ -148,9 +148,9 @@ func runAlignmentOnce(configFile string) error {
 
 	// Display summary
 	if driftCount == 0 {
-		fmt.Println("✔ Infrastructure aligned (no drift detected)")
+		fmt.Println(" Infrastructure aligned (no drift detected)")
 	} else {
-		fmt.Printf("✔ Infrastructure alignment complete\n")
+		fmt.Printf(" Infrastructure alignment complete\n")
 		fmt.Printf("  - %d resource%s with drift detected\n", driftCount, pluralize(driftCount))
 		if healedCount > 0 {
 			fmt.Printf("  - %d resource%s auto-healed\n", healedCount, pluralize(healedCount))

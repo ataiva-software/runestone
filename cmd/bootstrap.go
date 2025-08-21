@@ -54,7 +54,7 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 	showProgress := outputFormat == "human"
 	
 	if showProgress {
-		fmt.Println("🔧 Bootstrapping Runestone environment...")
+		fmt.Println(" Bootstrapping Runestone environment...")
 	}
 
 	// Parse configuration
@@ -75,7 +75,7 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 	ctx := context.Background()
 	for providerName, providerConfig := range cfg.Providers {
 		if showProgress {
-			fmt.Printf("✔ Installing provider %s...\n", providerName)
+			fmt.Printf(" Installing provider %s...\n", providerName)
 		}
 
 		var provider providers.Provider
@@ -109,7 +109,7 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 
 	// Validate configuration
 	if showProgress {
-		fmt.Println("✔ Validating configuration...")
+		fmt.Println(" Validating configuration...")
 	}
 	if err := validateConfiguration(cfg, registry, parser); err != nil {
 		result.Error = fmt.Errorf("configuration validation failed: %w", err)
@@ -132,9 +132,9 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 	result.ResourceCount = len(instances)
 
 	if showProgress {
-		fmt.Printf("✔ Configuration validated successfully\n")
-		fmt.Printf("✔ Found %d resource instances\n", len(instances))
-		fmt.Printf("🔍 Evaluating policies...\n")
+		fmt.Printf(" Configuration validated successfully\n")
+		fmt.Printf(" Found %d resource instances\n", len(instances))
+		fmt.Printf(" Evaluating policies...\n")
 	}
 
 	// Evaluate policies
@@ -164,7 +164,7 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 
 	// Report policy violations for human output
 	if showProgress && len(allViolations) > 0 {
-		fmt.Printf("⚠️  Found %d policy violations:\n", len(allViolations))
+		fmt.Printf("️  Found %d policy violations:\n", len(allViolations))
 		
 		bySeverity := policyEngine.GetViolationsBySeverity(allViolations)
 		
@@ -176,17 +176,17 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 		}
 		
 		if warnings, hasWarnings := bySeverity["warning"]; hasWarnings {
-			fmt.Printf("  ⚠️  %d warnings\n", len(warnings))
+			fmt.Printf("  ️  %d warnings\n", len(warnings))
 			for _, violation := range warnings {
 				fmt.Printf("    - %s: %s\n", violation.ResourceID, violation.Message)
 			}
 		}
 		
 		if info, hasInfo := bySeverity["info"]; hasInfo {
-			fmt.Printf("  ℹ️  %d info\n", len(info))
+			fmt.Printf("  ℹ  %d info\n", len(info))
 		}
 	} else if showProgress {
-		fmt.Printf("✔ No policy violations found\n")
+		fmt.Printf(" No policy violations found\n")
 	}
 
 	// Fail bootstrap if there are error-level violations
@@ -246,18 +246,18 @@ func runBootstrap(cmd *cobra.Command, args []string) error {
 			}
 			
 			if showProgress {
-				fmt.Printf("  ✔ Module '%s' loaded successfully\n", moduleName)
+				fmt.Printf("   Module '%s' loaded successfully\n", moduleName)
 			}
 			result.ModulesLoaded++
 		}
 		
 		if showProgress {
-			fmt.Printf("✔ All modules loaded successfully\n")
+			fmt.Printf(" All modules loaded successfully\n")
 		}
 	}
 
 	if showProgress {
-		fmt.Println("✔ Bootstrap complete!")
+		fmt.Println(" Bootstrap complete!")
 	}
 
 	// Success!

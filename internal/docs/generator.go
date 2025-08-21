@@ -48,7 +48,7 @@ func (g *Generator) Generate() error {
 		return fmt.Errorf("failed to generate examples: %w", err)
 	}
 
-	fmt.Printf("✔ Documentation generated in %s\n", g.outputDir)
+	fmt.Printf("Documentation generated in %s\n", g.outputDir)
 	return nil
 }
 

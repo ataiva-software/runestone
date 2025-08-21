@@ -51,7 +51,7 @@ func runPreview(cmd *cobra.Command, args []string) error {
 	showProgress := outputFormat == "human"
 	
 	if showProgress {
-		fmt.Println("🔍 Inspecting live infrastructure...")
+		fmt.Println(" Inspecting live infrastructure...")
 	}
 
 	// Parse configuration

@@ -6,27 +6,27 @@ Runestone is Ataiva's next-generation Infrastructure-as-Code platform. It solves
 
 ## Key Features
 
-- **Stateless Execution**: No centralized state files - infrastructure state is inferred from cloud provider APIs ✅ **WORKING**
-- **Real-time Drift Detection**: Continuous reconciliation with optional auto-healing ✅ **WORKING**
-- **DAG-based Orchestration**: Parallel execution with intelligent dependency resolution ✅ **WORKING**
-- **Human-centric CLI**: Clean, readable output with comprehensive change summaries ✅ **WORKING**
-- **Expression Language**: Support for loops, conditionals, and variables in YAML ✅ **WORKING**
-- **Policy-as-Code**: Built-in security and governance policy enforcement ✅ **WORKING**
-- **Module System**: Reusable infrastructure components with local module support ✅ **WORKING**
+- **Stateless Execution**: No centralized state files - infrastructure state is inferred from cloud provider APIs  **WORKING**
+- **Real-time Drift Detection**: Continuous reconciliation with optional auto-healing  **WORKING**
+- **DAG-based Orchestration**: Parallel execution with intelligent dependency resolution  **WORKING**
+- **Human-centric CLI**: Clean, readable output with comprehensive change summaries  **WORKING**
+- **Expression Language**: Support for loops, conditionals, and variables in YAML  **WORKING**
+- **Policy-as-Code**: Built-in security and governance policy enforcement  **WORKING**
+- **Module System**: Reusable infrastructure components with local module support  **WORKING**
 - **Multi-cloud Ready**: Extensible provider system (AWS production-ready, Kubernetes planned)
 
 ## Production Ready
 
 Runestone is **production-ready** for AWS infrastructure management with:
 
-### ✅ **Core Infrastructure Engine**
+###  **Core Infrastructure Engine**
 
 - Complete stateless execution with AWS API integration
 - Real-time drift detection and auto-healing
 - DAG-based parallel execution with dependency resolution
 - Comprehensive error handling and retry logic
 
-### ✅ **AWS Provider (Production Ready)**
+### **AWS Provider (Production Ready)**
 
 - **S3 Buckets**: Full lifecycle management with versioning and tagging
 - **EC2 Instances**: Complete instance management with state tracking
@@ -37,29 +37,29 @@ Runestone is **production-ready** for AWS infrastructure management with:
 - **IAM Resources**: Complete IAM user, role, and policy management with tagging
 - **Resource Validation**: Comprehensive validation for all resource types
 
-### ✅ **Policy-as-Code (Production Ready)**
+### **Policy-as-Code (Production Ready)**
 
 - Built-in security policies (S3 versioning, resource tagging)
 - Governance policies (environment tagging, cost optimization)
 - Severity-based enforcement (errors, warnings, info)
 - Real-time policy evaluation during bootstrap
 
-### ✅ **Enterprise Features**
+### **Enterprise Features**
 
 - Module system for reusable infrastructure components
 - Expression language with conditionals and loops
 - Comprehensive CLI with human-readable output
 - Full test coverage with integration testing
 
-### 🚀 **Getting Started**
+### **Getting Started**
 
 Ready to use Runestone in production? Check out our comprehensive documentation:
 
-- **[📚 Complete Documentation](docs/)** - Auto-generated, always up-to-date
-- **[🚀 Getting Started Guide](docs/getting-started.md)** - Step-by-step tutorial
-- **[📖 API Reference](docs/api-reference.md)** - Complete CLI command reference
-- **[⚙️ Configuration Reference](docs/configuration-reference.md)** - YAML configuration guide
-- **[💡 Examples](docs/examples.md)** - Real-world use cases and patterns
+- **[ Complete Documentation](docs/)** - Auto-generated, always up-to-date
+- **[ Getting Started Guide](docs/getting-started.md)** - Step-by-step tutorial
+- **[ API Reference](docs/api-reference.md)** - Complete CLI command reference
+- **[ Configuration Reference](docs/configuration-reference.md)** - YAML configuration guide
+- **[ Examples](docs/examples.md)** - Real-world use cases and patterns
 
 Or jump right in with the [Quick Start](#-quick-start) below.
 
@@ -170,14 +170,14 @@ runestone bootstrap
 Output:
 
 ```
-🔧 Bootstrapping Runestone environment...
-✔ Installing provider aws...
-✔ Validating configuration...
-✔ Configuration validated successfully
-✔ Found 5 resource instances
-🔍 Evaluating policies...
-✔ No policy violations found
-✔ Bootstrap complete!
+ Bootstrapping Runestone environment...
+ Installing provider aws...
+ Validating configuration...
+ Configuration validated successfully
+ Found 5 resource instances
+ Evaluating policies...
+ No policy violations found
+ Bootstrap complete!
 ```
 
 ### 3. Preview changes
@@ -189,7 +189,7 @@ runestone preview
 Output:
 
 ```
-🔍 Inspecting live infrastructure...
+ Inspecting live infrastructure...
 
 Changes detected:
 
@@ -214,7 +214,7 @@ runestone commit
 Output:
 
 ```
-⏳ Committing infrastructure changes...
+ Committing infrastructure changes...
 
 --- Execution Level 1 ---
 + Creating aws:s3:bucket.my-app-logs
@@ -231,7 +231,7 @@ Output:
 ✓ Completed aws:ec2:instance.web-1
 
 --- Execution Complete ---
-✔ Commit complete (duration: 3m45s)
+ Commit complete (duration: 3m45s)
 
 Changes applied:
 + Created aws:s3:bucket.my-app-logs
@@ -250,8 +250,8 @@ runestone align --once
 Output:
 
 ```
-🔄 Aligning desired state with reality... (14:30:15)
-✔ Infrastructure aligned (no drift detected)
+ Aligning desired state with reality... (14:30:15)
+ Infrastructure aligned (no drift detected)
 ```
 
 ### 6. Policy Enforcement in Action
@@ -266,18 +266,18 @@ runestone bootstrap --config examples/policy-demo.yaml
 Output:
 
 ```
-🔧 Bootstrapping Runestone environment...
-✔ Installing provider aws...
-✔ Validating configuration...
-✔ Configuration validated successfully
-✔ Found 4 resource instances
-🔍 Evaluating policies...
-⚠️  Found 3 policy violations:
-  ⚠️  3 warnings
+ Bootstrapping Runestone environment...
+ Installing provider aws...
+ Validating configuration...
+ Configuration validated successfully
+ Found 4 resource instances
+ Evaluating policies...
+  Found 3 policy violations:
+    3 warnings
     - aws:s3:bucket.bad-bucket: S3 bucket should have versioning enabled for data protection
     - aws:s3:bucket.bad-bucket: Resource must have an Environment tag for proper resource management
     - aws:rds:instance.demo-db: Resource must have an Environment tag for proper resource management
-✔ Bootstrap complete!
+ Bootstrap complete!
 ```
 
 **Built-in Policies Include:**
@@ -615,99 +615,99 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - 📧 Email: <support@ataiva.com>
 - 🐛 Issues: [GitHub Issues](https://github.com/ataiva-software/runestone/issues)
-- 📖 Documentation: [docs/](docs/)
+-  Documentation: [docs/](docs/)
 
-## 🗺️ Roadmap
+##  Roadmap
 
-### Phase 1 (MVP) - Core Infrastructure Engine ✅ **COMPLETED**
+### Phase 1 (MVP) - Core Infrastructure Engine  **COMPLETED**
 
-#### Configuration & Parsing ✅
+#### Configuration & Parsing 
 
-- [x] YAML configuration parsing ✅ **WORKING**
-- [x] Expression language with variables, conditionals, loops ✅ **WORKING**
-- [x] Resource expansion (count, for_each) ✅ **WORKING**
-- [x] Configuration validation ✅ **WORKING**
+- [x] YAML configuration parsing  **WORKING**
+- [x] Expression language with variables, conditionals, loops  **WORKING**
+- [x] Resource expansion (count, for_each)  **WORKING**
+- [x] Configuration validation  **WORKING**
 
-#### CLI Commands ✅
+#### CLI Commands 
 
-- [x] `bootstrap` - Install providers and validate configuration ✅ **WORKING**
-- [x] `preview` - Preview changes and detect drift ✅ **WORKING** (requires valid AWS credentials)
-- [x] `commit` - Apply infrastructure changes ✅ **WORKING** (requires valid AWS credentials)
-- [x] `align` - Continuously reconcile drift ✅ **WORKING** (requires valid AWS credentials)
-- [x] `dismantle` - Destroy infrastructure resources ✅ **WORKING** (requires valid AWS credentials)
-- [x] `docs` - Generate comprehensive documentation ✅ **WORKING**
+- [x] `bootstrap` - Install providers and validate configuration  **WORKING**
+- [x] `preview` - Preview changes and detect drift  **WORKING** (requires valid AWS credentials)
+- [x] `commit` - Apply infrastructure changes  **WORKING** (requires valid AWS credentials)
+- [x] `align` - Continuously reconcile drift  **WORKING** (requires valid AWS credentials)
+- [x] `dismantle` - Destroy infrastructure resources  **WORKING** (requires valid AWS credentials)
+- [x] `docs` - Generate comprehensive documentation  **WORKING**
 
-#### AWS Provider ✅
+#### AWS Provider 
 
-- [x] Provider initialization and authentication ✅ **WORKING**
-- [x] S3 bucket support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] EC2 instance support (create, state retrieval, delete) ✅ **WORKING**
-- [x] Resource tagging ✅ **WORKING**
-- [x] Error handling and retries ✅ **WORKING**
+- [x] Provider initialization and authentication  **WORKING**
+- [x] S3 bucket support (create, update, delete, state retrieval)  **WORKING**
+- [x] EC2 instance support (create, state retrieval, delete)  **WORKING**
+- [x] Resource tagging  **WORKING**
+- [x] Error handling and retries  **WORKING**
 
-#### Core Engine ✅
+#### Core Engine 
 
-- [x] DAG-based execution engine ✅ **WORKING**
-- [x] Dependency resolution ✅ **WORKING**
-- [x] Parallel execution ✅ **WORKING**
-- [x] State management (stateless design) ✅ **WORKING**
-- [x] Drift detection algorithm ✅ **WORKING**
-- [x] Auto-healing capabilities ✅ **WORKING**
+- [x] DAG-based execution engine  **WORKING**
+- [x] Dependency resolution  **WORKING**
+- [x] Parallel execution  **WORKING**
+- [x] State management (stateless design)  **WORKING**
+- [x] Drift detection algorithm  **WORKING**
+- [x] Auto-healing capabilities  **WORKING**
 
-#### Testing & Documentation ✅
+#### Testing & Documentation 
 
-- [x] Comprehensive test suite ✅ **WORKING** (all tests passing)
-- [x] Integration tests with AWS ✅ **WORKING** (skips when no credentials)
-- [x] CLI help documentation ✅ **WORKING**
-- [x] Example configurations ✅ **WORKING**
-- [x] Automatic documentation generation ✅ **WORKING**
-- [x] Getting Started guide ✅ **WORKING**
-- [x] API Reference ✅ **WORKING**
-- [x] Configuration Reference ✅ **WORKING**
-- [x] Examples documentation ✅ **WORKING**
+- [x] Comprehensive test suite  **WORKING** (all tests passing)
+- [x] Integration tests with AWS  **WORKING** (skips when no credentials)
+- [x] CLI help documentation  **WORKING**
+- [x] Example configurations  **WORKING**
+- [x] Automatic documentation generation  **WORKING**
+- [x] Getting Started guide  **WORKING**
+- [x] API Reference  **WORKING**
+- [x] Configuration Reference  **WORKING**
+- [x] Examples documentation  **WORKING**
 
-#### Build System ✅
+#### Build System 
 
-- [x] Makefile with automated builds ✅ **WORKING**
-- [x] Automatic documentation generation on build ✅ **WORKING**
-- [x] Test automation ✅ **WORKING**
-- [x] Development and release builds ✅ **WORKING**
+- [x] Makefile with automated builds  **WORKING**
+- [x] Automatic documentation generation on build  **WORKING**
+- [x] Test automation  **WORKING**
+- [x] Development and release builds  **WORKING**
 
-### Phase 2 (Team Scale) ✅ **COMPLETED**
+### Phase 2 (Team Scale)  **COMPLETED**
 
-#### Enhanced AWS Resources ✅
+#### Enhanced AWS Resources 
 
-- [x] RDS instance support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] IAM User support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] IAM Role support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] IAM Policy support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] VPC support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] Subnet support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] Internet Gateway support (create, update, delete, state retrieval) ✅ **WORKING**
-- [x] Enhanced resource validation and error handling ✅ **WORKING**
-- [x] Comprehensive test coverage for all AWS resources ✅ **WORKING**
+- [x] RDS instance support (create, update, delete, state retrieval)  **WORKING**
+- [x] IAM User support (create, update, delete, state retrieval)  **WORKING**
+- [x] IAM Role support (create, update, delete, state retrieval)  **WORKING**
+- [x] IAM Policy support (create, update, delete, state retrieval)  **WORKING**
+- [x] VPC support (create, update, delete, state retrieval)  **WORKING**
+- [x] Subnet support (create, update, delete, state retrieval)  **WORKING**
+- [x] Internet Gateway support (create, update, delete, state retrieval)  **WORKING**
+- [x] Enhanced resource validation and error handling  **WORKING**
+- [x] Comprehensive test coverage for all AWS resources  **WORKING**
 
-#### Policy-as-Code Integration ✅
+#### Policy-as-Code Integration 
 
-- [x] Policy engine with rule evaluation ✅ **WORKING**
-- [x] Built-in security and governance policies ✅ **WORKING**
-- [x] Policy violation detection and reporting ✅ **WORKING**
-- [x] Integration with bootstrap command ✅ **WORKING**
-- [x] Severity-based policy enforcement ✅ **WORKING**
+- [x] Policy engine with rule evaluation  **WORKING**
+- [x] Built-in security and governance policies  **WORKING**
+- [x] Policy violation detection and reporting  **WORKING**
+- [x] Integration with bootstrap command  **WORKING**
+- [x] Severity-based policy enforcement  **WORKING**
 
-#### Module System Foundation ✅
+#### Module System Foundation 
 
-- [x] Module registry and management ✅ **WORKING**
-- [x] Local module loading support ✅ **WORKING**
-- [x] Module validation and expansion framework ✅ **WORKING**
-- [x] Comprehensive test coverage ✅ **WORKING**
+- [x] Module registry and management  **WORKING**
+- [x] Local module loading support  **WORKING**
+- [x] Module validation and expansion framework  **WORKING**
+- [x] Comprehensive test coverage  **WORKING**
 
 #### Additional Phase 2 Features (Future)
 
 - [ ] Kubernetes provider
-- [x] Enhanced AWS resources (Lambda, CloudFormation) ✅ **Lambda WORKING**
-- [x] JSON/Markdown output for CI/CD ✅ **WORKING**
-- [x] CI/CD integration examples ✅ **WORKING**
+- [x] Enhanced AWS resources (Lambda, CloudFormation)  **Lambda WORKING**
+- [x] JSON/Markdown output for CI/CD  **WORKING**
+- [x] CI/CD integration examples  **WORKING**
 
 ### Phase 3 (Next-Gen InfraOps)
 
@@ -728,4 +728,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by [Ataiva Software](https://ataiva.com)**
+**Built with  by [Ataiva Software](https://ataiva.com)**

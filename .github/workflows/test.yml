@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
     - uses: actions/checkout@v4
@@ -30,10 +31,13 @@ jobs:
       run: go mod download
     
     - name: Run tests
-      run: go test -v ./...
+      run: go test -short -v ./...
+      env:
+        # Skip AWS integration tests in CI
+        SKIP_AWS_TESTS: "true"
     
     - name: Build binary
       run: go build -o runestone .
     
-    - name: Test bootstrap command
-      run: ./runestone bootstrap --config examples/vpc-demo.yaml
+    - name: Test bootstrap command (validation only)
+      run: ./runestone bootstrap --config examples/basic-aws.yaml

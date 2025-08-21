@@ -25,12 +25,13 @@ func init() {
 func runDocs(cmd *cobra.Command, args []string) error {
 	outputDir, _ := cmd.Flags().GetString("output")
 
-	fmt.Println("📚 Generating documentation...")
+	fmt.Println("Generating documentation...")
 
 	generator := docs.NewGenerator(outputDir)
 	if err := generator.Generate(); err != nil {
 		return fmt.Errorf("failed to generate documentation: %w", err)
 	}
 
+	fmt.Printf("Documentation generated in %s\n", outputDir)
 	return nil
 }
