@@ -1,0 +1,30 @@
+# Binaries
+runestone
+runestone-*
+*.exe
+
+# Go
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Build artifacts
+dist/
+build/

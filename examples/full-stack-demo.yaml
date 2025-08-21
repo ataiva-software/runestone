@@ -1,0 +1,236 @@
+project: full-stack-app
+environment: production
+variables:
+  region: us-east-1
+  vpc_cidr: "10.0.0.0/16"
+  tags:
+    owner: platform-team
+    project: full-stack-app
+    Environment: production  # Required by policy
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # VPC Infrastructure
+  - kind: aws:ec2:vpc
+    name: app-vpc
+    properties:
+      cidr_block: "10.0.0.0/16"
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:ec2:internet_gateway
+    name: app-igw
+    properties:
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:ec2:subnet
+    name: public-subnet-1a
+    properties:
+      vpc_id: "vpc-placeholder"
+      cidr_block: "10.0.1.0/24"
+      availability_zone: "us-east-1a"
+      tags:
+        Name: public-subnet-1a
+        Tier: public
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:ec2:subnet
+    name: private-subnet-1a
+    properties:
+      vpc_id: "vpc-placeholder"
+      cidr_block: "10.0.2.0/24"
+      availability_zone: "us-east-1a"
+      tags:
+        Name: private-subnet-1a
+        Tier: private
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+    driftPolicy:
+      autoHeal: true
+
+  # Security Groups
+  - kind: aws:ec2:security_group
+    name: web-sg
+    properties:
+      description: "Security group for web servers"
+      vpc_id: "vpc-placeholder"
+      tags: "${tags}"
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:ec2:security_group
+    name: db-sg
+    properties:
+      description: "Security group for database"
+      vpc_id: "vpc-placeholder"
+      tags: "${tags}"
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+    driftPolicy:
+      autoHeal: true
+
+  # Storage
+  - kind: aws:s3:bucket
+    name: "${project}-assets-${environment}"
+    properties:
+      versioning: true  # Required by policy
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:dynamodb:table
+    name: "${project}-users"
+    properties:
+      hash_key: "user_id"
+      attributes:
+        - name: "user_id"
+          type: "S"
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  # Database
+  - kind: aws:rds:instance
+    name: "${project}-db"
+    properties:
+      db_instance_class: db.t3.micro
+      engine: mysql
+      engine_version: "8.0"
+      db_name: appdb
+      master_username: admin
+      master_user_password: "ChangeMe123!"
+      allocated_storage: 20
+      backup_retention_period: 7
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  # IAM for Lambda
+  - kind: aws:iam:role
+    name: lambda-execution-role
+    properties:
+      assume_role_policy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "lambda.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+      path: "/service-roles/"
+      description: "Lambda execution role"
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+
+  # Serverless Functions
+  - kind: aws:lambda:function
+    name: api-handler
+    properties:
+      runtime: "python3.9"
+      handler: "api.handler"
+      role: "arn:aws:iam::123456789012:role/service-roles/lambda-execution-role"
+      description: "Main API handler"
+      timeout: 30
+      memory_size: 256
+      code_content: |
+        import json
+        import boto3
+        
+        def handler(event, context):
+            # Connect to DynamoDB
+            dynamodb = boto3.resource('dynamodb')
+            table = dynamodb.Table('full-stack-app-users')
+            
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({
+                    'message': 'Hello from Full Stack App!',
+                    'environment': 'production'
+                })
+            }
+      tags: "${tags}"
+    depends_on:
+      - "aws:iam:role.lambda-execution-role"
+      - "aws:dynamodb:table.${project}-users"
+    driftPolicy:
+      autoHeal: true
+
+  - kind: aws:lambda:function
+    name: data-processor
+    properties:
+      runtime: "python3.11"
+      handler: "processor.main"
+      role: "arn:aws:iam::123456789012:role/service-roles/lambda-execution-role"
+      description: "Background data processor"
+      timeout: 300
+      memory_size: 512
+      code_content: |
+        import json
+        import boto3
+        
+        def main(event, context):
+            # Process data from S3 and store in DynamoDB
+            s3 = boto3.client('s3')
+            dynamodb = boto3.resource('dynamodb')
+            
+            return {
+                'statusCode': 200,
+                'body': json.dumps({
+                    'processed': True,
+                    'timestamp': context.aws_request_id
+                })
+            }
+      tags: "${tags}"
+    depends_on:
+      - "aws:iam:role.lambda-execution-role"
+      - "aws:s3:bucket.${project}-assets-${environment}"
+    driftPolicy:
+      autoHeal: true
+
+  # API Gateway
+  - kind: aws:apigateway:rest_api
+    name: "${project}-api"
+    properties:
+      description: "Full Stack App REST API"
+      tags: "${tags}"
+    depends_on:
+      - "aws:lambda:function.api-handler"
+    driftPolicy:
+      autoHeal: true
+
+  # Compute
+  - kind: aws:ec2:instance
+    name: web-server-${index}
+    count: 2
+    properties:
+      instance_type: t3.micro
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: "web-server-${index}"
+        Role: web-server
+        Environment: "${environment}"
+    depends_on:
+      - "aws:ec2:subnet.public-subnet-1a"
+      - "aws:ec2:security_group.web-sg"
+    driftPolicy:
+      autoHeal: true

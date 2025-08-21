@@ -1,0 +1,148 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    
+    - name: Download dependencies
+      run: go mod download
+    
+    - name: Run tests
+      run: go test -v ./...
+    
+    - name: Set version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Build binaries
+      run: |
+        # Build for multiple platforms
+        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-linux-amd64 .
+        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-linux-arm64 .
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-darwin-amd64 .
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-darwin-arm64 .
+        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-windows-amd64.exe .
+    
+    - name: Generate documentation
+      run: |
+        ./runestone-linux-amd64 docs --output docs
+    
+    - name: Create release notes
+      run: |
+        cat > release-notes.md << 'EOF'
+        # Runestone ${{ steps.version.outputs.version }}
+        
+        ## 🚀 Features
+        - **13 AWS Resource Types** - Complete coverage for modern cloud applications
+        - **Stateless Design** - No state files to manage
+        - **Real-time Drift Detection** - Continuous monitoring with auto-healing
+        - **Policy-as-Code** - Built-in security and governance
+        - **DAG-based Orchestration** - Intelligent dependency resolution
+        
+        ## 📦 Supported AWS Resources
+        - **Storage**: S3 Buckets, DynamoDB Tables
+        - **Compute**: EC2 Instances, Lambda Functions
+        - **Networking**: VPC, Subnets, Internet Gateways, Security Groups
+        - **Database**: RDS Instances
+        - **API**: API Gateway
+        - **Security**: IAM Users, Roles, Policies
+        
+        ## 🔧 Installation
+        
+        ### Download Binary
+        Download the appropriate binary for your platform from the assets below.
+        
+        ### Install with Go
+        ```bash
+        go install github.com/ataiva-software/runestone@${{ steps.version.outputs.version }}
+        ```
+        
+        ## 🏃 Quick Start
+        
+        ```bash
+        # Create a simple configuration
+        cat > infra.yaml << EOF
+        project: my-app
+        environment: dev
+        providers:
+          aws:
+            region: us-east-1
+        resources:
+          - kind: aws:s3:bucket
+            name: my-app-data
+            properties:
+              versioning: true
+              tags:
+                Environment: dev
+        EOF
+        
+        # Deploy infrastructure
+        runestone bootstrap
+        runestone preview
+        runestone commit
+        ```
+        
+        ## 📚 Documentation
+        - [Getting Started Guide](https://github.com/ataiva-software/runestone/blob/main/docs/getting-started.md)
+        - [Configuration Reference](https://github.com/ataiva-software/runestone/blob/main/docs/configuration-reference.md)
+        - [Examples](https://github.com/ataiva-software/runestone/blob/main/docs/examples.md)
+        EOF
+    
+    - name: Create or update tag
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+        git push origin ${{ steps.version.outputs.version }}
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: Runestone ${{ steps.version.outputs.version }}
+        body_path: release-notes.md
+        files: |
+          runestone-linux-amd64
+          runestone-linux-arm64
+          runestone-darwin-amd64
+          runestone-darwin-arm64
+          runestone-windows-amd64.exe
+        draft: false
+        prerelease: false

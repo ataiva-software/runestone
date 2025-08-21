@@ -1,0 +1,86 @@
+project: vpc-demo
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    purpose: vpc-demo
+    Environment: dev  # Required by policy
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # VPC for the application
+  - kind: aws:ec2:vpc
+    name: app-vpc
+    properties:
+      cidr_block: "10.0.0.0/16"
+      tags:
+        owner: platform-team
+        purpose: application-network
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Internet Gateway for public access
+  - kind: aws:ec2:internet_gateway
+    name: app-igw
+    properties:
+      tags:
+        owner: platform-team
+        purpose: internet-access
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Public subnet for web servers
+  - kind: aws:ec2:subnet
+    name: public-subnet-1a
+    properties:
+      vpc_id: "vpc-placeholder"  # Will be replaced with actual VPC ID
+      cidr_block: "10.0.1.0/24"
+      availability_zone: "us-east-1a"
+      tags:
+        owner: platform-team
+        purpose: public-web-tier
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+
+  # Private subnet for application servers
+  - kind: aws:ec2:subnet
+    name: private-subnet-1a
+    properties:
+      vpc_id: "vpc-placeholder"  # Will be replaced with actual VPC ID
+      cidr_block: "10.0.2.0/24"
+      availability_zone: "us-east-1a"
+      tags:
+        owner: platform-team
+        purpose: private-app-tier
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+    depends_on:
+      - "aws:ec2:vpc.app-vpc"
+
+  # S3 bucket for application data
+  - kind: aws:s3:bucket
+    name: vpc-demo-app-data
+    properties:
+      versioning: true  # Required by policy
+      tags:
+        owner: platform-team
+        purpose: application-data
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false

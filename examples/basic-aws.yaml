@@ -1,0 +1,53 @@
+project: analytics-platform
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    purpose: analytics
+  regions: [us-east-1, us-west-2]
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # Single S3 bucket
+  - kind: aws:s3:bucket
+    name: analytics-logs
+    properties:
+      versioning: true
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Multiple S3 buckets using for_each
+  - kind: aws:s3:bucket
+    name: "regional-logs-${region}"
+    for_each: "${regions}"
+    properties:
+      versioning: "${environment == 'prod'}"
+      tags:
+        owner: "${tags.owner}"
+        environment: "${environment}"
+        region: "${region}"
+    driftPolicy:
+      autoHeal: false
+      notifyOnly: true
+
+  # Multiple EC2 instances using count
+  - kind: aws:ec2:instance
+    name: web-${index}
+    count: 2
+    properties:
+      instance_type: "${environment == 'prod' ? 't3.medium' : 't3.micro'}"
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: "web-${index}"
+        Environment: "${environment}"
+        Owner: "${tags.owner}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false

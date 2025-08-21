@@ -1,0 +1,73 @@
+project: analytics-platform
+environment: prod
+variables:
+  region: us-east-1
+  backup_region: us-west-2
+  instance_count: 3
+  tags:
+    owner: platform-team
+    purpose: analytics
+    cost-center: engineering
+    environment: prod
+
+providers:
+  aws:
+    region: "${region}"
+    profile: prod
+
+resources:
+  # Primary analytics bucket
+  - kind: aws:s3:bucket
+    name: analytics-data-prod
+    properties:
+      versioning: true
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Backup bucket in different region
+  - kind: aws:s3:bucket
+    name: analytics-backup-prod
+    properties:
+      versioning: true
+      tags:
+        owner: "${tags.owner}"
+        purpose: backup
+        primary-region: "${region}"
+        backup-region: "${backup_region}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Web tier instances
+  - kind: aws:ec2:instance
+    name: web-${index}
+    count: "${instance_count}"
+    properties:
+      instance_type: t3.medium
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: "web-${index}"
+        Tier: web
+        Environment: "${environment}"
+        Owner: "${tags.owner}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Database instance
+  - kind: aws:ec2:instance
+    name: database-primary
+    properties:
+      instance_type: "${environment == 'prod' ? 't3.large' : 't3.medium'}"
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: database-primary
+        Tier: database
+        Environment: "${environment}"
+        Owner: "${tags.owner}"
+        Backup: "true"
+    driftPolicy:
+      autoHeal: false
+      notifyOnly: true

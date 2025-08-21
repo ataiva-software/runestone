@@ -1,0 +1,60 @@
+project: webapp-with-db
+environment: dev
+variables:
+  region: us-east-1
+  web_server_count: 2  # Add explicit variable
+  tags:
+    owner: platform-team
+    project: webapp-with-db
+    environment: dev
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # Application logs bucket
+  - kind: aws:s3:bucket
+    name: "${project}-logs-${environment}"
+    properties:
+      versioning: true
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Database
+  - kind: aws:rds:instance
+    name: "${project}-db-${environment}"
+    properties:
+      db_instance_class: "${environment == 'prod' ? 'db.t3.medium' : 'db.t3.micro'}"
+      engine: mysql
+      engine_version: "8.0"
+      db_name: webapp
+      master_username: admin
+      master_user_password: "ChangeMe123!"
+      allocated_storage: "${environment == 'prod' ? 100 : 20}"
+      backup_retention_period: "${environment == 'prod' ? 7 : 1}"
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Web servers
+  - kind: aws:ec2:instance
+    name: web-${index}
+    count: 2
+    properties:
+      instance_type: "${environment == 'prod' ? 't3.medium' : 't3.micro'}"
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: "web-${index}"
+        Role: web-server
+        Environment: "${environment}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+    depends_on:
+      - "aws:rds:instance.${project}-db-${environment}"
+      - "aws:s3:bucket.${project}-logs-${environment}"

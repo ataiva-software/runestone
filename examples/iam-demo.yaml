@@ -1,0 +1,100 @@
+project: iam-demo
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    purpose: iam-demo
+    Environment: dev  # Required by policy
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # IAM User for application access
+  - kind: aws:iam:user
+    name: app-user
+    properties:
+      path: "/applications/"
+      tags:
+        owner: platform-team
+        purpose: application-access
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # IAM Role for EC2 instances
+  - kind: aws:iam:role
+    name: ec2-app-role
+    properties:
+      path: "/applications/"
+      description: "Role for EC2 instances to access AWS services"
+      assume_role_policy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+      tags:
+        owner: platform-team
+        purpose: ec2-service-access
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # IAM Policy for S3 access
+  - kind: aws:iam:policy
+    name: s3-read-policy
+    properties:
+      path: "/applications/"
+      description: "Policy allowing read access to S3 buckets"
+      policy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+              ],
+              "Resource": [
+                "arn:aws:s3:::my-app-*",
+                "arn:aws:s3:::my-app-*/*"
+              ]
+            }
+          ]
+        }
+      tags:
+        owner: platform-team
+        purpose: s3-read-access
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # S3 bucket for the application
+  - kind: aws:s3:bucket
+    name: my-app-iam-demo-bucket
+    properties:
+      versioning: true  # Required by policy
+      tags:
+        owner: platform-team
+        purpose: application-storage
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+    depends_on:
+      - "aws:iam:policy.s3-read-policy"

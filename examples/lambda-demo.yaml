@@ -1,0 +1,116 @@
+project: lambda-demo
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    purpose: serverless-demo
+    Environment: dev  # Required by policy
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # IAM role for Lambda execution
+  - kind: aws:iam:role
+    name: lambda-execution-role
+    properties:
+      assume_role_policy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+      path: "/service-roles/"
+      description: "Lambda execution role for demo functions"
+      tags:
+        owner: platform-team
+        purpose: lambda-execution
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # S3 bucket for Lambda artifacts
+  - kind: aws:s3:bucket
+    name: lambda-demo-artifacts
+    properties:
+      versioning: true  # Required by policy
+      tags:
+        owner: platform-team
+        purpose: lambda-artifacts
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Simple Hello World Lambda function
+  - kind: aws:lambda:function
+    name: hello-world-function
+    properties:
+      runtime: "python3.9"
+      handler: "index.handler"
+      role: "arn:aws:iam::123456789012:role/service-roles/lambda-execution-role"
+      description: "Simple Hello World Lambda function"
+      timeout: 30
+      memory_size: 128
+      code_content: |
+        def handler(event, context):
+            return {
+                'statusCode': 200,
+                'body': 'Hello from Lambda!'
+            }
+      tags:
+        owner: platform-team
+        purpose: demo-function
+        Environment: dev  # Required by policy
+    depends_on:
+      - "aws:iam:role.lambda-execution-role"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Data processing Lambda function
+  - kind: aws:lambda:function
+    name: data-processor-function
+    properties:
+      runtime: "python3.11"
+      handler: "processor.main"
+      role: "arn:aws:iam::123456789012:role/service-roles/lambda-execution-role"
+      description: "Data processing Lambda function"
+      timeout: 300
+      memory_size: 512
+      code_content: |
+        import json
+        
+        def main(event, context):
+            # Process incoming data
+            data = event.get('data', [])
+            processed = [item.upper() for item in data if isinstance(item, str)]
+            
+            return {
+                'statusCode': 200,
+                'body': json.dumps({
+                    'processed_items': processed,
+                    'count': len(processed)
+                })
+            }
+      tags:
+        owner: platform-team
+        purpose: data-processing
+        Environment: dev  # Required by policy
+    depends_on:
+      - "aws:iam:role.lambda-execution-role"
+      - "aws:s3:bucket.lambda-demo-artifacts"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false

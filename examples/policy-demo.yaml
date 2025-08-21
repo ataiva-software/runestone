@@ -1,0 +1,71 @@
+project: policy-demo
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    project: policy-demo
+    # Note: Missing Environment tag to trigger policy violation
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # S3 bucket without versioning (policy violation)
+  - kind: aws:s3:bucket
+    name: bad-bucket
+    properties:
+      versioning: false  # This will trigger a policy violation
+      tags: "${tags}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # S3 bucket with versioning (compliant)
+  - kind: aws:s3:bucket
+    name: good-bucket
+    properties:
+      versioning: true  # This is compliant
+      tags:
+        owner: platform-team
+        project: policy-demo
+        Environment: dev  # This has the required Environment tag
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # EC2 instance with proper tags (compliant)
+  - kind: aws:ec2:instance
+    name: compliant-instance
+    properties:
+      instance_type: t3.micro  # Small instance is fine
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: compliant-instance
+        Environment: dev  # Has required Environment tag
+        owner: platform-team
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # RDS instance without Environment tag (policy violation)
+  - kind: aws:rds:instance
+    name: demo-db
+    properties:
+      db_instance_class: db.t3.micro
+      engine: mysql
+      engine_version: "8.0"
+      db_name: demodb
+      master_username: admin
+      master_user_password: "ChangeMe123!"
+      allocated_storage: 20
+      backup_retention_period: 1
+      tags:
+        owner: platform-team
+        project: policy-demo
+        # Missing Environment tag - will trigger violation
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false

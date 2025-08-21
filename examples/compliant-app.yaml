@@ -1,0 +1,64 @@
+project: my-app
+environment: dev
+variables:
+  region: us-east-1
+  tags:
+    owner: platform-team
+    purpose: demo
+    Environment: dev  # Required by policy
+
+providers:
+  aws:
+    region: "${region}"
+    profile: default
+
+resources:
+  # S3 bucket with versioning (policy compliant)
+  - kind: aws:s3:bucket
+    name: my-app-logs
+    properties:
+      versioning: true  # Required by policy
+      tags:
+        owner: platform-team
+        purpose: demo
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # RDS database
+  - kind: aws:rds:instance
+    name: my-app-db
+    properties:
+      db_instance_class: db.t3.micro
+      engine: mysql
+      engine_version: "8.0"
+      db_name: myapp
+      master_username: admin
+      master_user_password: "ChangeMe123!"
+      allocated_storage: 20
+      backup_retention_period: 1
+      tags:
+        owner: platform-team
+        purpose: demo
+        Environment: dev  # Required by policy
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+
+  # Multiple EC2 instances using count
+  - kind: aws:ec2:instance
+    name: web-${index}
+    count: 2
+    properties:
+      instance_type: t3.micro
+      ami: ami-0abcdef1234567890
+      tags:
+        Name: "web-${index}"
+        Environment: "${environment}"
+        owner: "${tags.owner}"
+    driftPolicy:
+      autoHeal: true
+      notifyOnly: false
+    depends_on:
+      - "aws:rds:instance.my-app-db"
