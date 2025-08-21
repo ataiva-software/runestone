@@ -1,5 +1,9 @@
 # Runestone
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/runestone)](https://goreportcard.com/report/github.com/ataiva-software/runestone)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Test](https://github.com/ataiva-software/runestone/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/runestone/actions/workflows/test.yml)
+
 **Declarative, drift-aware infrastructure — stateless, multi-cloud ready, and human-centric.**
 
 Runestone is Ataiva's next-generation Infrastructure-as-Code platform. It solves the common pain points of existing IaC tools — brittle state files, drift surprises, and complex multi-cloud orchestration — by offering a stateless, DAG-driven execution engine with real-time reconciliation and human-friendly CLI workflows.
