@@ -84,8 +84,9 @@ func (f *MarkdownFormatter) FormatPreviewResult(result PreviewResult) (string, e
 		sb.WriteString("## Planned Changes\n\n")
 		for _, change := range result.Changes {
 			icon := f.getChangeIcon(change.Type)
+			title := strings.ToUpper(change.Type[:1]) + strings.ToLower(change.Type[1:])
 			sb.WriteString(fmt.Sprintf("- %s **%s** `%s.%s`\n", 
-				icon, strings.Title(change.Type), change.ResourceKind, change.ResourceName))
+				icon, title, change.ResourceKind, change.ResourceName))
 			if change.Description != "" {
 				sb.WriteString(fmt.Sprintf("  - %s\n", change.Description))
 			}

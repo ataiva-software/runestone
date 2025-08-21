@@ -105,7 +105,10 @@ func runDismantle(cmd *cobra.Command, args []string) error {
 	if !autoApprove {
 		fmt.Printf("\nThis action cannot be undone. Do you want to proceed? (yes/no): ")
 		var response string
-		fmt.Scanln(&response)
+		if _, err := fmt.Scanln(&response); err != nil {
+			fmt.Println("Failed to read input, operation cancelled.")
+			return nil
+		}
 		if response != "yes" && response != "y" {
 			fmt.Println("Operation cancelled.")
 			return nil

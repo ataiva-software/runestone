@@ -67,8 +67,9 @@ func (f *HumanFormatter) FormatPreviewResult(result PreviewResult) (string, erro
 			sb.WriteString("\nDetailed changes:\n")
 			for _, change := range result.Changes {
 				icon := f.getChangeIcon(change.Type)
+				title := strings.ToUpper(change.Type[:1]) + strings.ToLower(change.Type[1:])
 				sb.WriteString(fmt.Sprintf("%s %s %s.%s (%s)\n", 
-					icon, strings.Title(change.Type), change.ResourceKind, change.ResourceName, change.ResourceKind))
+					icon, title, change.ResourceKind, change.ResourceName, change.ResourceKind))
 			}
 		}
 	}

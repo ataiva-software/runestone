@@ -50,14 +50,13 @@ func runAlign(cmd *cobra.Command, args []string) error {
 	}
 
 	// Run continuous alignment
-	for {
-		select {
-		case <-ticker.C:
-			if err := runAlignmentOnce(configFile); err != nil {
-				fmt.Printf("Alignment failed: %v\n", err)
-			}
+	for range ticker.C {
+		if err := runAlignmentOnce(configFile); err != nil {
+			fmt.Printf("Alignment failed: %v\n", err)
 		}
 	}
+	
+	return nil
 }
 
 func runAlignmentOnce(configFile string) error {

@@ -90,7 +90,10 @@ func runCommit(cmd *cobra.Command, args []string) error {
 		displayPreviewResults(changeSummary, driftResults)
 		fmt.Print("\nDo you want to apply these changes? (yes/no): ")
 		var response string
-		fmt.Scanln(&response)
+		if _, err := fmt.Scanln(&response); err != nil {
+			fmt.Println("Failed to read input, operation cancelled.")
+			return nil
+		}
 		if response != "yes" && response != "y" {
 			fmt.Println("Operation cancelled.")
 			return nil

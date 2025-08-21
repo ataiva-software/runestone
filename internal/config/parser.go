@@ -110,12 +110,6 @@ func (p *Parser) processValue(v interface{}) error {
 	return p.processValueReflectWithVisited(reflect.ValueOf(v), visited)
 }
 
-// processValueReflect handles the actual reflection processing
-func (p *Parser) processValueReflect(val reflect.Value) error {
-	visited := make(map[uintptr]bool)
-	return p.processValueReflectWithVisited(val, visited)
-}
-
 // processValueReflectWithVisited handles the actual reflection processing with cycle detection
 func (p *Parser) processValueReflectWithVisited(val reflect.Value, visited map[uintptr]bool) error {
 	if !val.IsValid() {
