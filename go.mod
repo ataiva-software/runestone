@@ -1,4 +1,4 @@
-module github.com/ataiva-software/runestone
+module github.com/ataiva-software/drift
 
 go 1.22
 

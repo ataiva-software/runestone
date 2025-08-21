@@ -55,20 +55,20 @@ jobs:
     - name: Build binaries
       run: |
         # Build for multiple platforms
-        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-linux-amd64 .
-        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-linux-arm64 .
-        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-darwin-amd64 .
-        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-darwin-arm64 .
-        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o runestone-windows-amd64.exe .
+        GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o drift-linux-amd64 .
+        GOOS=linux GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o drift-linux-arm64 .
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o drift-darwin-amd64 .
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o drift-darwin-arm64 .
+        GOOS=windows GOARCH=amd64 go build -ldflags="-X main.version=${{ steps.version.outputs.version }}" -o drift-windows-amd64.exe .
     
     - name: Generate documentation
       run: |
-        ./runestone-linux-amd64 docs --output docs
+        ./drift-linux-amd64 docs --output docs
     
     - name: Create release notes
       run: |
         cat > release-notes.md << 'EOF'
-        # Runestone ${{ steps.version.outputs.version }}
+        # Drift ${{ steps.version.outputs.version }}
         
         ## Features
         - **13 AWS Resource Types** - Complete coverage for modern cloud applications
@@ -92,7 +92,7 @@ jobs:
         
         ### Install with Go
         ```bash
-        go install github.com/ataiva-software/runestone@${{ steps.version.outputs.version }}
+        go install github.com/ataiva-software/drift@${{ steps.version.outputs.version }}
         ```
         
         ## Quick Start
@@ -115,15 +115,15 @@ jobs:
         YAML
         
         # Deploy infrastructure
-        ./runestone bootstrap
-        ./runestone preview
-        ./runestone commit
+        ./drift bootstrap
+        ./drift preview
+        ./drift commit
         ```
         
         ## Documentation
-        - [Getting Started Guide](https://github.com/ataiva-software/runestone/blob/main/docs/getting-started.md)
-        - [Configuration Reference](https://github.com/ataiva-software/runestone/blob/main/docs/configuration-reference.md)
-        - [Examples](https://github.com/ataiva-software/runestone/blob/main/docs/examples.md)
+        - [Getting Started Guide](https://github.com/ataiva-software/drift/blob/main/docs/getting-started.md)
+        - [Configuration Reference](https://github.com/ataiva-software/drift/blob/main/docs/configuration-reference.md)
+        - [Examples](https://github.com/ataiva-software/drift/blob/main/docs/examples.md)
         EOF
     
     - name: Create or update tag
@@ -141,10 +141,10 @@ jobs:
         name: Runestone ${{ steps.version.outputs.version }}
         body_path: release-notes.md
         files: |
-          runestone-linux-amd64
-          runestone-linux-arm64
-          runestone-darwin-amd64
-          runestone-darwin-arm64
-          runestone-windows-amd64.exe
+          drift-linux-amd64
+          drift-linux-arm64
+          drift-darwin-amd64
+          drift-darwin-arm64
+          drift-windows-amd64.exe
         draft: false
         prerelease: false

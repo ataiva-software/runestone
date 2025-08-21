@@ -1,12 +1,12 @@
-# Runestone
+# Drift
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/runestone)](https://goreportcard.com/report/github.com/ataiva-software/runestone)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ataiva-software/drift)](https://goreportcard.com/report/github.com/ataiva-software/drift)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Test](https://github.com/ataiva-software/runestone/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/runestone/actions/workflows/test.yml)
+[![Test](https://github.com/ataiva-software/drift/actions/workflows/test.yml/badge.svg)](https://github.com/ataiva-software/drift/actions/workflows/test.yml)
 
 **Declarative, drift-aware infrastructure — stateless, multi-cloud ready, and human-centric.**
 
-Runestone is Ataiva's next-generation Infrastructure-as-Code platform. It solves the common pain points of existing IaC tools — brittle state files, drift surprises, and complex multi-cloud orchestration — by offering a stateless, DAG-driven execution engine with real-time reconciliation and human-friendly CLI workflows.
+Drift is Ataiva's next-generation Infrastructure-as-Code platform. It solves the common pain points of existing IaC tools — brittle state files, drift surprises, and complex multi-cloud orchestration — by offering a stateless, DAG-driven execution engine with real-time reconciliation and human-friendly CLI workflows.
 
 ## Key Features
 
@@ -21,7 +21,7 @@ Runestone is Ataiva's next-generation Infrastructure-as-Code platform. It solves
 
 ## Production Ready
 
-Runestone is **production-ready** for AWS infrastructure management with:
+Drift is **production-ready** for AWS infrastructure management with:
 
 ###  **Core Infrastructure Engine**
 
@@ -57,7 +57,7 @@ Runestone is **production-ready** for AWS infrastructure management with:
 
 ### **Getting Started**
 
-Ready to use Runestone in production? Check out our comprehensive documentation:
+Ready to use Drift in production? Check out our comprehensive documentation:
 
 - **[ Complete Documentation](docs/)** - Auto-generated, always up-to-date
 - **[ Getting Started Guide](docs/getting-started.md)** - Step-by-step tutorial
@@ -73,32 +73,32 @@ Or jump right in with the [Quick Start](#-quick-start) below.
 
 Download the latest release for your platform:
 
-- **Linux (x64)**: [runestone-linux-amd64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-linux-amd64)
-- **Linux (ARM64)**: [runestone-linux-arm64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-linux-arm64)
-- **macOS (Intel)**: [runestone-darwin-amd64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-darwin-amd64)
-- **macOS (Apple Silicon)**: [runestone-darwin-arm64](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-darwin-arm64)
-- **Windows (x64)**: [runestone-windows-amd64.exe](https://github.com/ataiva-software/runestone/releases/latest/download/runestone-windows-amd64.exe)
+- **Linux (x64)**: [drift-linux-amd64](https://github.com/ataiva-software/drift/releases/latest/download/drift-linux-amd64)
+- **Linux (ARM64)**: [drift-linux-arm64](https://github.com/ataiva-software/drift/releases/latest/download/drift-linux-arm64)
+- **macOS (Intel)**: [drift-darwin-amd64](https://github.com/ataiva-software/drift/releases/latest/download/drift-darwin-amd64)
+- **macOS (Apple Silicon)**: [drift-darwin-arm64](https://github.com/ataiva-software/drift/releases/latest/download/drift-darwin-arm64)
+- **Windows (x64)**: [drift-windows-amd64.exe](https://github.com/ataiva-software/drift/releases/latest/download/drift-windows-amd64.exe)
 
 After downloading, make the binary executable and move it to your PATH:
 
 ```bash
 # Linux/macOS
-chmod +x runestone-*
-sudo mv runestone-* /usr/local/bin/runestone
+chmod +x drift-*
+sudo mv drift-* /usr/local/bin/drift
 
 # Verify installation
-runestone --version
+drift --version
 ```
 
 ### Build from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/ataiva-software/runestone.git
-cd runestone
+git clone https://github.com/ataiva-software/drift.git
+cd drift
 
 # Build the binary
-go build -o runestone .
+go build -o drift .
 
 # Install globally (optional)
 go install .
@@ -191,13 +191,13 @@ resources:
 ### 2. Bootstrap your environment
 
 ```bash
-runestone bootstrap
+drift bootstrap
 ```
 
 Output:
 
 ```
- Bootstrapping Runestone environment...
+ Bootstrapping Drift environment...
  Installing provider aws...
  Validating configuration...
  Configuration validated successfully
@@ -210,7 +210,7 @@ Output:
 ### 3. Preview changes
 
 ```bash
-runestone preview
+drift preview
 ```
 
 Output:
@@ -229,13 +229,13 @@ Detailed changes:
 + Create aws:ec2:instance.web-1 (aws:ec2:instance)
 + Create aws:iam:user.app-service-user (aws:iam:user)
 
-Next: run 'runestone commit' to apply these changes.
+Next: run 'drift commit' to apply these changes.
 ```
 
 ### 4. Apply changes
 
 ```bash
-runestone commit
+drift commit
 ```
 
 Output:
@@ -271,7 +271,7 @@ Changes applied:
 ### 5. Monitor and align drift
 
 ```bash
-runestone align --once
+drift align --once
 ```
 
 Output:
@@ -283,17 +283,17 @@ Output:
 
 ### 6. Policy Enforcement in Action
 
-Runestone includes built-in policies that automatically evaluate your infrastructure:
+Drift includes built-in policies that automatically evaluate your infrastructure:
 
 ```bash
 # Example with policy violations
-runestone bootstrap --config examples/policy-demo.yaml
+drift bootstrap --config examples/policy-demo.yaml
 ```
 
 Output:
 
 ```
- Bootstrapping Runestone environment...
+ Bootstrapping Drift environment...
  Installing provider aws...
  Validating configuration...
  Configuration validated successfully
@@ -328,22 +328,22 @@ Output:
 
 ```bash
 # Bootstrap
-runestone bootstrap --config infra.yaml
+drift bootstrap --config infra.yaml
 
 # Preview with JSON output
-runestone preview --output json
+drift preview --output json
 
 # Commit with DAG visualization
-runestone commit --graph --auto-approve
+drift commit --graph --auto-approve
 
 # Continuous alignment
-runestone align --interval 10m
+drift align --interval 10m
 
 # One-time alignment
-runestone align --once
+drift align --once
 
 # Destroy infrastructure
-runestone dismantle --auto-approve
+drift dismantle --auto-approve
 ```
 
 ### Output Formats
@@ -352,13 +352,13 @@ All commands support multiple output formats for CI/CD integration:
 
 ```bash
 # Human-readable output (default)
-runestone bootstrap --output human
+drift bootstrap --output human
 
 # JSON output for automation
-runestone bootstrap --output json
+drift bootstrap --output json
 
 # Markdown output for documentation
-runestone bootstrap --output markdown
+drift bootstrap --output markdown
 ```
 
 **CI/CD Integration**: See [examples/ci-cd-integration.md](examples/ci-cd-integration.md) for complete GitHub Actions, GitLab CI, and Jenkins pipeline examples.
@@ -499,7 +499,7 @@ go test ./internal/executor
 ### Project Structure
 
 ```
-runestone/
+drift/
 ├── cmd/                    # CLI commands
 │   ├── bootstrap.go
 │   ├── preview.go
@@ -523,7 +523,7 @@ runestone/
 
 ### Build System
 
-Runestone uses a Makefile for build automation with automatic documentation generation:
+Drift uses a Makefile for build automation with automatic documentation generation:
 
 ```bash
 # Development build with docs
@@ -591,7 +591,7 @@ Both methods create a GitHub release with:
 
 ### Documentation Generation
 
-Documentation is automatically generated during build using the `runestone docs` command:
+Documentation is automatically generated during build using the `drift docs` command:
 
 - **Getting Started Guide** - Step-by-step tutorial
 - **API Reference** - Complete CLI command reference
@@ -600,7 +600,7 @@ Documentation is automatically generated during build using the `runestone docs`
 
 ```bash
 # Generate docs manually
-./runestone docs --output docs
+./drift docs --output docs
 
 # Generated files:
 # docs/getting-started.md
@@ -641,7 +641,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - 📧 Email: <support@ataiva.com>
-- 🐛 Issues: [GitHub Issues](https://github.com/ataiva-software/runestone/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/ataiva-software/drift/issues)
 -  Documentation: [docs/](docs/)
 
 ##  Roadmap
