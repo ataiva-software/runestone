@@ -70,14 +70,14 @@ jobs:
         cat > release-notes.md << 'EOF'
         # Runestone ${{ steps.version.outputs.version }}
         
-        ## 🚀 Features
+        ## Features
         - **13 AWS Resource Types** - Complete coverage for modern cloud applications
         - **Stateless Design** - No state files to manage
         - **Real-time Drift Detection** - Continuous monitoring with auto-healing
         - **Policy-as-Code** - Built-in security and governance
         - **DAG-based Orchestration** - Intelligent dependency resolution
         
-        ## 📦 Supported AWS Resources
+        ## Supported AWS Resources
         - **Storage**: S3 Buckets, DynamoDB Tables
         - **Compute**: EC2 Instances, Lambda Functions
         - **Networking**: VPC, Subnets, Internet Gateways, Security Groups
@@ -85,7 +85,7 @@ jobs:
         - **API**: API Gateway
         - **Security**: IAM Users, Roles, Policies
         
-        ## 🔧 Installation
+        ## Installation
         
         ### Download Binary
         Download the appropriate binary for your platform from the assets below.
@@ -95,11 +95,11 @@ jobs:
         go install github.com/ataiva-software/runestone@${{ steps.version.outputs.version }}
         ```
         
-        ## 🏃 Quick Start
+        ## Quick Start
         
         ```bash
         # Create a simple configuration
-        cat > infra.yaml << EOF
+        cat > infra.yaml << 'YAML'
         project: my-app
         environment: dev
         providers:
@@ -112,15 +112,15 @@ jobs:
               versioning: true
               tags:
                 Environment: dev
-        EOF
+        YAML
         
         # Deploy infrastructure
-        runestone bootstrap
-        runestone preview
-        runestone commit
+        ./runestone bootstrap
+        ./runestone preview
+        ./runestone commit
         ```
         
-        ## 📚 Documentation
+        ## Documentation
         - [Getting Started Guide](https://github.com/ataiva-software/runestone/blob/main/docs/getting-started.md)
         - [Configuration Reference](https://github.com/ataiva-software/runestone/blob/main/docs/configuration-reference.md)
         - [Examples](https://github.com/ataiva-software/runestone/blob/main/docs/examples.md)
